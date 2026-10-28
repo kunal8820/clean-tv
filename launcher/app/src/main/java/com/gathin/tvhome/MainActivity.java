@@ -300,6 +300,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private boolean libraryFocusPending;
     private RecyclerView.OnScrollListener pendingFocusScroll;
 
+    /** Search (Google Assistant) button*/
+    private View btnSearch;
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     /** Refreshes the network pill when the connection changes: at boot Wi-Fi often connects after Home is shown. */
     private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
@@ -778,6 +781,17 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             return true;
         });
 
+        // Search (Google Assistant) button.
+        btnSearch = findViewById(R.id.btnSearch);
+        if (btnSearch != null) {
+            btnSearch.setOnClickListener(v -> openGoogleAssistant());
+            btnSearch.setVisibility(cfg.googleAssistant ? View.VISIBLE : View.GONE);
+        }
+
+        if (iconOnlyButtons) {
+            makeIconOnly((TextView) btnSearch);
+        }
+
         // Keep focus on the top bar at its ends and at the top: Android's focus finder would otherwise
         // jump to a tile far below when there is nothing in that direction.
         boolean rtlMenuBar = getResources().getBoolean(R.bool.rtl_menu_bar);
@@ -789,12 +803,17 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 focusTile(singleRow ? lastFocused : lastFocused % COLUMNS);
                 return true;
             }
-            int firstButton = btnInputs.getVisibility() == View.VISIBLE ? R.id.btnInputs : firstTopButton().getId();
+
+            int firstButton = (btnSearch != null && btnSearch.getVisibility() == View.VISIBLE) ? R.id.btnSearch
+                : (btnInputs != null && btnInputs.getVisibility() == View.VISIBLE ? R.id.btnInputs : firstTopButton().getId());
+
+
             int leftButton = rtlMenuBar ? R.id.btnSettings : firstButton;
             int rightButton = rtlMenuBar ? firstButton : R.id.btnSettings;
             if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) return v.getId() == leftButton;
             return keyCode == KeyEvent.KEYCODE_DPAD_RIGHT && v.getId() == rightButton;
         };
+        if (btnSearch != null) btnSearch.setOnKeyListener(pillKeys);
         btnInputs.setOnKeyListener(pillKeys);
         btnWifi.setOnKeyListener(pillKeys);
         btnVpn.setOnKeyListener(pillKeys);
@@ -3590,6 +3609,66 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
                 return getString(R.string.card_state_new_label);
             default:
                 return getString(R.string.card_state_new);
+        }
+    }
+
+    /**
+     * Opens Google Assistant voice search, the same as the mic button on the Google TV remote.
+     * Tries the voice search intent first; falls back to the text search activity on TVs that do
+     * not have Assistant installed (pure Android TV devices, some older firmware).
+     */
+    private void openGoogleAssistant() {
+        // Standard Google Assistant voice trigger (works on Google TV and Android TV with Assistant)
+        Intent voice = new Intent(Intent.ACTION_VOICE_COMMAND);
+        voice.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (voice.resolveActivity(getPackageManager()) != null) {
+            try {
+                startActivity(voice);
+                return;
+            } catch (ActivityNotFoundException | SecurityException ignored ) {
+            }
+        }
+        // Fallback: generic voice search (works on AOSP Android TV builds)
+        Intent search = new Intent("android.search.action.GLOBAL_SEARCH");
+        search.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (search.resolveActivity(getPackageManager()) != null) {
+            try {
+                startActivity(search);
+                return;
+            } catch (ActivityNotFoundException | SecurityException ignored) {
+            }
+        }
+        // 3. Danh sách các package trợ lý phổ biến trên Android TV / Google TV (bao gồm Sony, Google TV gốc, v.v.)
+        String[] assistantPackages = {
+            "com.google.android.tv.assistant",
+            "com.google.android.googlequicksearchbox"
+        };
+
+        Intent targetIntent = null;
+        for (String pkg : assistantPackages) {
+            // Thử lấy Leanback Launch Intent trước (dành riêng cho Android TV)
+            targetIntent = getPackageManager().getLeanbackLaunchIntentForPackage(pkg);
+            // Nếu không có, thử lấy Launch Intent thông thường
+            if (targetIntent == null) {
+                targetIntent = getPackageManager().getLaunchIntentForPackage(pkg);
+            }
+            // Nếu tìm thấy package hợp lệ, dừng vòng lặp và sử dụng
+            if (targetIntent != null) {
+                break;
+            }
+        }
+
+        // 4. Thực thi mở Intent hoặc hiện Toast thông báo lỗi
+        if (targetIntent != null) {
+            targetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                startActivity(targetIntent);
+            } catch (ActivityNotFoundException | SecurityException ignored) {
+                Toast.makeText(this, R.string.not_available, Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            Toast.makeText(this, R.string.not_available, Toast.LENGTH_SHORT).show();
         }
     }
 }

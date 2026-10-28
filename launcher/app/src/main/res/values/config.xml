@@ -479,4 +479,8 @@
     <!-- Tiles drawn from the app's icon and name instead of its banner (for banners that crop badly). -->
     <string-array name="icon_tiles" translatable="false">
     </string-array>
+
+    <!-- Show Google Assistant button -->
+    <bool name="google_assistant">false</bool>
+
 </resources>
