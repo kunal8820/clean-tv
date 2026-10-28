@@ -262,6 +262,21 @@ final class RemoteKeys {
         }
     }
 
+    /**
+     * The flags on the KEYCODE_MENU pair that Xiaomi's China firmware (MiTV-MFTR0, Android 11) injects for a short
+     * press of the remote's Menu key, after keeping the real press for itself (#1637). They include FLAG_CANCELED,
+     * so the pair reads as a cancelled press, and the undocumented 0x1000, 0x2000 and 0x4000, which no real
+     * cancelled press carries.
+     */
+    static final int XIAOMI_SHORT_MENU_FLAGS = 0x7531;
+
+    /** True for the UP that ends a Menu press: not cancelled, or cancelled only as Xiaomi's injected short press is. */
+    static boolean menuReleased(int action, int flags) {
+        if (action != KeyEvent.ACTION_UP) return false;
+        return (flags & KeyEvent.FLAG_CANCELED) == 0
+                || (flags & XIAOMI_SHORT_MENU_FLAGS) == XIAOMI_SHORT_MENU_FLAGS;
+    }
+
     /** The app a mapped key opens: its hold entry after HOLD_MS, otherwise its normal one. */
     static String target(String app, String holdApp, long heldMs) {
         return heldMs >= HOLD_MS && holdApp != null ? holdApp : app;

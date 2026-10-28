@@ -1331,7 +1331,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             int position = focusedTilePosition();
             if (position >= 0 && position < adapter.appCount()
                     && !getPackageName().equals(adapter.packageAt(position))) {
-                if (event.getAction() == KeyEvent.ACTION_UP && !event.isCanceled()) {
+                if (RemoteKeys.menuReleased(event.getAction(), event.getFlags())) {
                     onTileLongPress(position, getCurrentFocus());
                 }
                 return true;

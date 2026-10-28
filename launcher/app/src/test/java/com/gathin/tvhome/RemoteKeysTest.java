@@ -241,4 +241,17 @@ public class RemoteKeysTest {
         remote.up("1:191:0", 1700, 1000, "tap", "hold");
         assertEquals(Arrays.asList("tap", "hold"), remote.opened);
     }
+
+    @Test public void menuReleasedTakesXiaomisInjectedShortPress() {
+        // ACTION_DOWN 0, ACTION_UP 1; FLAG_CANCELED 0x20, FLAG_CANCELED_LONG_PRESS 0x100, FLAG_FROM_SYSTEM 0x8.
+        assertTrue(RemoteKeys.menuReleased(1, 0));
+        assertTrue(RemoteKeys.menuReleased(1, 0x8));
+        assertTrue(RemoteKeys.menuReleased(1, RemoteKeys.XIAOMI_SHORT_MENU_FLAGS));
+        assertFalse(RemoteKeys.menuReleased(0, 0));
+        assertFalse(RemoteKeys.menuReleased(0, RemoteKeys.XIAOMI_SHORT_MENU_FLAGS));
+        // A cancelled press elsewhere, long press or not, still opens nothing.
+        assertFalse(RemoteKeys.menuReleased(1, 0x20));
+        assertFalse(RemoteKeys.menuReleased(1, 0x20 | 0x100 | 0x8));
+        assertFalse(RemoteKeys.menuReleased(1, RemoteKeys.XIAOMI_SHORT_MENU_FLAGS & ~0x4000));
+    }
 }
