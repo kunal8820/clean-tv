@@ -65,8 +65,10 @@ before touching anything you might use.
 | **Only an Android phone** | Use the community-built [Clean Your TV app](https://cleanyour.tv/app) by [@udhaykumarbala](https://github.com/udhaykumarbala): connect, analyse, clean, in about five minutes. No laptop, no coding agent. |
 
 The three steps below are written for a coding assistant: the computer needs to be on the same Wi-Fi as
-the TV, with a shell on it. Without an assistant, [Doing it by hand](#doing-it-by-hand) is the same job,
-run by you.
+the TV, with a shell on it, plus Python 3, a JDK from 17 through 22, and Android SDK platform 34
+with build-tools 34 (the assistant builds the launcher there, and asks before it installs anything).
+Without an assistant, [Doing it by hand](#doing-it-by-hand)
+is the same job, run by you, and it has the install commands.
 
 Any of these work: Claude Code (on [0G Private Computer](https://pc.0g.ai/?utm_source=cleanyourtv&utm_medium=github&utm_campaign=readme) or an [Anthropic plan](https://claude.com/pricing)), [Codex](https://github.com/openai/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli) or [Antigravity CLI](https://antigravity.google/product/antigravity-cli).
 
@@ -156,7 +158,13 @@ person with your model skips that step: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Doing it by hand
 
-Everything the assistant does, you can run yourself. The tools need Python 3 and nothing else.
+Everything the assistant does, you can run yourself. Two things have to be on the computer first:
+
+| You need | For |
+|---|---|
+| **Python 3** (any 3.x) | The tools. The venv command below installs what they import. |
+| **JDK 17 through 22** (a full JDK, including `jlink`) and **Android SDK platform 34** with **build-tools 34.0.0 or any newer 34.x** | Building the launcher. JDK 23 and newer stops Gradle 8.9. Platform 34 is the one the build reads; a newer platform does not replace it. On macOS, when none of these is installed: `brew install openjdk@17 android-commandlinetools`, then `sdkmanager "platforms;android-34" "build-tools;34.0.0"`. On Linux the install script looks in `~/Android/Sdk` and for `java` on your PATH. |
+
 `tools/tv.py` talks to network ADB on port 5555. If that port stays closed and the TV offers
 Wireless debugging with a pairing code (the Chromecast with Google TV and the Google TV Streamer
 do), pair it once with the stock `adb` and run `adb tcpip 5555` first, as
@@ -201,8 +209,10 @@ the repository: list paths are relative to the directory you run from, and absol
 <details>
 <summary><b>Windows (PowerShell)</b></summary>
 
-Every script has a PowerShell twin next to it. On Windows with Android Studio installed nothing
-else is needed:
+Every script has a PowerShell twin next to it. Install Python 3 and a JDK from 17 through 22, and
+in the SDK Manager add platform 34 and build-tools 34 (34.0.0 or any newer 34.x). The script uses
+`JAVA_HOME` when it points at a JDK in that range, and otherwise Android Studio's bundled JDK when
+that JDK is in the same range:
 
 ```powershell
 python -m venv tools\venv; tools\venv\Scripts\python.exe -m pip install -r tools\requirements.txt
@@ -419,8 +429,8 @@ script for it is in [PR #84](https://github.com/Gathin23/cleanyourtv/pull/84).
 <details>
 <summary><b>Can I just download the APK?</b></summary>
 
-Build it with the one-line script; it takes a minute and you
-control what goes on your TV. No prebuilt binaries.
+Build it with the one-line script in [Doing it by hand](#doing-it-by-hand); it takes a minute and you
+control what goes on your TV. That needs the JDK and Android SDK named there. No prebuilt binaries.
 
 </details>
 
