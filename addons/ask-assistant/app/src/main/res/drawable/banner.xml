@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The TV banner: a speech bubble with sound bars on a teal field. Drawn for this add-on, no third-party art. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp" android:height="180dp"
+    android:viewportWidth="320" android:viewportHeight="180">
+    <path android:fillColor="#FF0E2A2B" android:pathData="M0,0h320v180h-320z" />
+    <path android:fillColor="#FF2BB3A3" android:pathData="M100,46h120a16,16 0,0 1,16 16v44a16,16 0,0 1,-16 16h-84l-24,20v-20h-12a16,16 0,0 1,-16 -16v-44a16,16 0,0 1,16 -16z" />
+    <path android:fillColor="#FF0E2A2B" android:pathData="M130,74h8v20h-8zM146,64h8v40h-8zM162,70h8v28h-8zM178,78h8v12h-8z" />
+</vector>

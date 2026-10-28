@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+
+    <!-- The remote's microphone, through the TV's speech recognizer. Asked for during setup. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- LiteLLM, SearXNG, ntfy, Open-Meteo, Cinemeta, the pages you ask to read; and the setup page for your phone. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- Stremio's Continue Watching row in the TV provider. Asked for during setup. -->
+    <uses-permission android:name="android.permission.READ_TV_LISTINGS" />
+    <!-- A timer going off brings its reminder up over the app you are in. Granted by install.sh (appops). -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="stremio" />
+        </intent>
+        <package android:name="com.stremio.one" />
+        <package android:name="org.smarttube.stable" />
+        <package android:name="org.smarttube.beta" />
+        <package android:name="com.liskovsoft.smarttubetv" />
+        <package android:name="com.liskovsoft.smarttubetv.beta" />
+        <package android:name="com.teamsmart.videomanager.tv" />
+        <package android:name="com.google.android.youtube.tv" />
+    </queries>
+
+    <application
+        android:allowBackup="false"
+        android:banner="@drawable/banner"
+        android:icon="@drawable/banner"
+        android:label="@string/app_name"
+        android:supportsRtl="false"
+        android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen">
+
+        <activity
+            android:name=".ChatActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/Panel">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+            <!-- Clean Your TV module card (docs/specs/card.md). -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.gathin.tvhome.category.DOCK_CARD" />
+            </intent-filter>
+            <!-- The remote's mic button. Android TV handles KEYCODE_ASSIST before any accessibility service sees it and
+                 starts the assistant: ASSIST, or on XGIMI WEB_SEARCH in the Assistant role holder's package. With Ask
+                 holding that role (cmd role add-role-holder android.app.role.ASSISTANT ...), it is Ask. -->
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST" />
+                <action android:name="android.intent.action.SEARCH_LONG_PRESS" />
+                <action android:name="android.intent.action.VOICE_COMMAND" />
+                <action android:name="android.speech.action.WEB_SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.gathin.tvhome.card" android:resource="@xml/module_card" />
+        </activity>
+
+        <activity
+            android:name=".SetupActivity"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape" />
+
+        <activity
+            android:name=".ReminderActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/Panel" />
+
+        <receiver
+            android:name=".Timers$Ring"
+            android:exported="false" />
+
+        <!-- Optional: the mic button opens Ask from any app. Switched on by install.sh VOICE_KEY=1. -->
+        <service
+            android:name=".KeyService"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/key_service" />
+        </service>
+
+        <!-- Setup over ADB only (content call): SetupProvider refuses every caller but the shell. -->
+        <provider
+            android:name=".SetupProvider"
+            android:authorities="io.github.nitzzzu.voicechat.setup"
+            android:exported="true" />
+    </application>
+</manifest>
