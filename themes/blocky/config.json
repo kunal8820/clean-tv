@@ -1,0 +1,17 @@
+{
+  "wallpaper": true,
+  "wallpaper_rotation_minutes": 60,
+  "wallpaper_moods": {
+    "morning": ["01-overworld-day.png", "04-plains.png", "05-desert.png", "06-snowy-taiga.png", "07-jungle.png", "08-ocean.png", "09-cherry-grove.png"],
+    "evening": ["01-overworld-day.png", "02-overworld-dusk.png", "04-plains.png", "05-desert.png", "06-snowy-taiga.png", "07-jungle.png", "08-ocean.png", "09-cherry-grove.png"],
+    "night": ["03-overworld-night.png", "10-cave.png", "11-nether.png"]
+  },
+  "wallpaper_captions": true,
+  "wallpaper_dim": 15,
+  "dock_opacity": 70,
+  "dock_title": false,
+  "ambient_glow": false,
+  "focus_overshoot": false,
+  "clock_wallpaper": true,
+  "clock_wallpaper_dim": 25
+}

@@ -1,0 +1,11 @@
+01-overworld-day.png	Overworld · Day
+02-overworld-dusk.png	Overworld · Dusk
+03-overworld-night.png	Overworld · Night
+04-plains.png	Plains
+05-desert.png	Desert
+06-snowy-taiga.png	Snowy Taiga
+07-jungle.png	Jungle
+08-ocean.png	Ocean
+09-cherry-grove.png	Cherry Grove
+10-cave.png	Cave
+11-nether.png	Nether
