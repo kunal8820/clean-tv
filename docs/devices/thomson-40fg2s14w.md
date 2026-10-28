@@ -61,10 +61,10 @@ TvSettings each declare one. The stock launcher also carries the highest HOME pr
 what the `set-home-activity` attempts above ran into.
 
 `dumpsys package com.gathin.tvhome | grep -o "[A-Z_]*DIRECT_BOOT_AWARE"` printed
-`PARTIALLY_DIRECT_BOOT_AWARE`, twice. That is the answer for the package, not for the activity Home starts
-in: in the launcher's manifest `HomeKeyService` is the one component marked
-`android:directBootAware="true"`, and `com.gathin.tvhome/.MainActivity` is not marked, so the line does not
-say whether Home can start before the first unlock.
+`PARTIALLY_DIRECT_BOOT_AWARE`. That is the answer for the package. In the launcher's manifest
+`HomeKeyService` is marked `android:directBootAware="true"`, and since adding support for cold boot
+recovery `com.gathin.tvhome/.MainActivity` is also marked `android:directBootAware="true"`;
+either can be the Home activity and the line must not assume only one component is aware.
 
 What that session leaves open is the boot the CVTE rule is about: with the stock launcher disabled, does this
 set finish booting, and does Home survive the next reboot. Neither was tried, so the set stays debloat-only.

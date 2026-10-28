@@ -192,10 +192,9 @@ class ThomsonNoteTest(unittest.TestCase):
 class DirectBootClaimTest(unittest.TestCase):
     """The CVTE bullet's claim about this launcher, against the manifest that has to back it.
 
-    The bullet used to say "This repo's launcher is direct-boot-aware", which reads as "the Home
-    activity can start before the first unlock". The manifest says otherwise: one service carries
-    the flag, the activity that answers HOME does not, so the package-level dump answers PARTIALLY
-    and cannot settle the question on a set with no FallbackHome.
+    The package-level dump answers PARTIALLY_DIRECT_BOOT_AWARE: HomeKeyService and, since the cold
+    boot recovery change, the HOME activity (MainActivity) carry the flag, but not every component
+    does. The bullet must not assume only one component is aware.
     """
 
     def setUp(self):
@@ -203,15 +202,14 @@ class DirectBootClaimTest(unittest.TestCase):
         self.home = [name for name, home, _ in self.components if home]
         self.aware = [name for name, _, aware in self.components if aware]
 
-    def test_the_manifest_is_one_home_activity_a_second_component_marks_aware(self):
-        # Both facts the corrected bullet rests on. If either changes, the bullet and the note have
-        # to be read again rather than left describing a launcher that no longer exists.
+    def test_the_manifest_is_one_home_activity_and_partly_direct_boot_aware(self):
         self.assertGreaterEqual(len(self.components), 8, "the manifest read as almost nothing")
         self.assertEqual(len(self.home), 1, "the launcher declares one HOME activity")
-        self.assertTrue(self.aware, "no component declares directBootAware: the answer is not PARTIALLY")
-        self.assertNotIn(self.home[0], self.aware,
-                         "the launcher's HOME activity now declares directBootAware: the CVTE bullet and "
-                         "docs/devices/thomson-40fg2s14w.md have to be updated with it")
+        self.assertIn(self.home[0], self.aware,
+                      "the HOME activity must declare directBootAware (cold boot recovery)")
+        self.assertIn(".HomeKeyService", self.aware)
+        self.assertLess(len(self.aware), len(self.components),
+                        "every component is aware: the package answer would no longer be PARTIALLY")
 
     def test_the_bullet_names_the_component_that_carries_the_flag(self):
         cvte = cvte_bullet()
@@ -220,7 +218,7 @@ class DirectBootClaimTest(unittest.TestCase):
                 self.assertIn(name.lstrip("."), cvte.replace("`", ""),
                               "the bullet must say which component is direct-boot aware")
 
-    def test_the_bullet_names_the_home_activity_that_does_not(self):
+    def test_the_bullet_names_the_home_activity(self):
         cvte = cvte_bullet().replace("`", "")
         self.assertIn(self.home[0].lstrip("."), cvte,
                       "the bullet must name the Home activity it is talking about")

@@ -547,14 +547,14 @@ Things that bit us or contributors, so they don't bite you. Commands use `tools/
   details). With file-based encryption (`getprop ro.crypto.type` says `file`) Android starts Home before
   the first unlock, and only a direct-boot-aware activity can start then. Most firmwares have a
   `FallbackHome` that stands in until the unlock; some, like this CVTE board, do not, and then boot
-  never completes. This repo's launcher is only partly direct-boot-aware: `HomeKeyService` declares
-  the flag, so Android binds it while the user is still locked, and `GuardRevival` declares it too
-  (neither that listener nor [the standby opt-in](#the-power-key-does-not-wake-the-tv-while-the-key-helper-is-bound)
-  is on in an ordinary install). `MainActivity`, the activity that
-  answers HOME, does not declare it. The second command below therefore prints
-  `PARTIALLY_DIRECT_BOOT_AWARE` for this launcher and cannot say whether Home exists before the
-  unlock; on a set with no `FallbackHome`, the first command is the one that decides. Check both
-  before disabling the stock launcher:
+  never completes. The launcher is partly direct-boot-aware: `HomeKeyService`, `GuardRevival` and,
+  since the cold boot recovery change, the HOME activity `MainActivity` all declare the flag, while
+  not every component does; neither `GuardRevival`'s listener nor
+  [the standby opt-in](#the-power-key-does-not-wake-the-tv-while-the-key-helper-is-bound) is on in an
+  ordinary install. The second command below therefore prints `PARTIALLY_DIRECT_BOOT_AWARE` for this
+  launcher: that is the package's answer, and it does not by itself say whether Home can start before
+  the first unlock, though `MainActivity` now carries the flag. On a set with no `FallbackHome`, the
+  first command is the one that decides. Check both before disabling the stock launcher:
   ```sh
   tools/tv.py 'cmd package query-activities --brief -a android.intent.action.MAIN -c android.intent.category.HOME'
   tools/tv.py 'dumpsys package <new.launcher.package> | grep -o "[A-Z_]*DIRECT_BOOT_AWARE"'
