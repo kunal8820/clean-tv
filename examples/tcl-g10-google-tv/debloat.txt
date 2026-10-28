@@ -22,6 +22,21 @@
 # YouTube 4065, Netflix 4062, Prime Video 4099 and Web 4159, which only app_keys brings back once
 # launcherx is off, and the gear as keycode 83 on scancode 233 (settings_key_keycodes).
 #
+# Also used on a TCL 55Q6CS, India (product G10_4K_GB, software V8-R75PT01-LF1V534, same build
+# STT2.230203.001, Realtek rtd6748). Tested on 2026-10-28 for one day with one reboot check, not yet lived with
+# for several days. As on the 43P69K, Samba TV ACR, logkit and ttvs shipped enabled; they were disabled and stayed
+# off after the reboot, as did everything else applied. tv.plus and smartlink.core are not installed. That unit
+# kept tv.remote.service (the mic works), dreamx (screensaver switched to the launcher's ClockDream), AirPlay,
+# Miracast and MagiConnect, and also disabled the India-firmware extras in the optional section below.
+# The saved setup Wi-Fi belonged to setupwraith there too: forgotten and re-joined in Settings first.
+# Its remote sends the same app keycodes as the C69B (Netflix 4062, YouTube 4065, Prime Video 4099, Web 4159,
+# gear 83 on scancode 233), plus Input as 4514 (scancode 139; input_key_keycodes) and Dashboard as 4001
+# (scancode 365; app_keys "4001:settings"), all dead once launcherx is off. With INPUT_KEY_SERVICE=1 and
+# HOME_KEY_SERVICE=1 all of them worked from the real remote, but held volume then stepped once per press, as in
+# docs/devices/tcl-55p71b-g09-key-repeat.md; the owner kept the buttons. APP_AUTO_START (below) held across the
+# reboot. disable.sh skips android.autoinstalls.config.google.gtvpai there (no permission block to read for its
+# input check); it was disabled by hand, and HDMI playback after that was not checked.
+#
 # Apply:   TV_HOST=<tv ip> tools/disable.sh examples/tcl-g10-google-tv/debloat.txt
 # Undo:    TV_HOST=<tv ip> tools/restore.sh examples/tcl-g10-google-tv/debloat.txt com.google.android.apps.tv.launcherx
 # Everything is DISABLED, not uninstalled. Comment out any line you want to keep.
@@ -98,3 +113,12 @@ com.google.android.apps.tv.dreamx      # ambient mode screensaver, see quirks ab
 # com.netflix.tokenmanager
 # com.amazon.amazonvideo.livingroom    # Prime Video
 # com.google.android.youtube.tv
+# Disabled on the India 55Q6CS (by the owner's choice for the apps):
+# com.tcl.messagebox                   # TCL push messages
+# com.tcl.t_solo                       # TCL promo app
+# com.tcl.smartalexa                   # Alexa integration
+# com.tcl.hearaid                      # hearing-aid audio app
+# com.tcl.browser                      # TCL web browser
+# com.google.android.youtube.tvmusic   # YouTube Music
+# com.google.android.videos            # Google TV / Play Movies storefront
+# com.google.android.play.games        # Play Games
