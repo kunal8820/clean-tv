@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Now Playing</string>
+    <string name="service_name">Now Playing Service</string>
+    <string name="no_media">No media currently playing</string>
+    <string name="play_music_prompt">Play a song in Spotify, YouTube Music, or any streaming app, then return here.</string>
+    <string name="resume_app">Resume in %1$s</string>
+    <string name="resume_generic">Resume App</string>
+    <string name="grant_permission">Enable Notification Listener</string>
+    <string name="permission_hint">Android TV requires Notification Listener permission to read media metadata.</string>
+</resources>

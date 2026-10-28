@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF090C14"
+    android:padding="56dp">
+
+    <!-- Top header: Add-on title -->
+    <TextView
+        android:id="@+id/headerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAllCaps="true"
+        android:letterSpacing="0.12"
+        android:textColor="#80FFFFFF"
+        android:textSize="14sp" />
+
+    <!-- Active Media Card Container -->
+    <LinearLayout
+        android:id="@+id/mediaCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Art / Vinyl Icon -->
+        <FrameLayout
+            android:id="@+id/artContainer"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:background="#15241C">
+
+            <ImageView
+                android:id="@+id/appIcon"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_launcher" />
+        </FrameLayout>
+
+        <!-- Song info & controls -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/appName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Spotify"
+                android:textColor="#1DB954"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/trackTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/no_media"
+                android:textColor="#FFFFFFFF"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever" />
+
+            <TextView
+                android:id="@+id/trackArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/play_music_prompt"
+                android:textColor="#B3FFFFFF"
+                android:textSize="20sp"
+                android:singleLine="true" />
+
+            <!-- Media playback controls -->
+            <LinearLayout
+                android:id="@+id/controlsRow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/btnPrevious"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:background="@drawable/btn_selector"
+                    android:src="@drawable/ic_skip_previous"
+                    android:tint="@color/btn_icon_tint"
+                    android:contentDescription="Previous Track"
+                    android:focusable="true" />
+
+                <ImageButton
+                    android:id="@+id/btnPlayPause"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/btn_selector"
+                    android:src="@drawable/ic_pause"
+                    android:tint="@color/btn_icon_tint"
+                    android:contentDescription="Play or Pause"
+                    android:focusable="true" />
+
+                <ImageButton
+                    android:id="@+id/btnNext"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@drawable/btn_selector"
+                    android:src="@drawable/ic_skip_next"
+                    android:tint="@color/btn_icon_tint"
+                    android:contentDescription="Next Track"
+                    android:focusable="true" />
+
+                <Button
+                    android:id="@+id/btnResume"
+                    android:layout_width="wrap_content"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="28dp"
+                    android:paddingStart="24dp"
+                    android:paddingEnd="24dp"
+                    android:background="@drawable/btn_selector"
+                    android:text="@string/resume_generic"
+                    android:textColor="@color/btn_text_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <!-- Permission prompt if listener not enabled -->
+            <Button
+                android:id="@+id/btnPermission"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_selector"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="@string/grant_permission"
+                android:textColor="@color/btn_text_color"
+                android:visibility="gone"
+                android:focusable="true" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 16:9 banner: music notes over a dark Spotify-green glowing card. Own art. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp" android:height="180dp"
+    android:viewportWidth="320" android:viewportHeight="180">
+    <path android:fillColor="#0D1310" android:pathData="M0,0h320v180h-320z" />
+    <path android:fillColor="#15241C" android:pathData="M20,20h280v140h-280z" />
+    <path android:fillColor="#1DB954"
+        android:pathData="M160,50v55c-3,-2 -7,-3 -11,-3 -12,0 -22,10 -22,22s10,22 22,22 22,-10 22,-22V72h24V50h-35z" />
+</vector>

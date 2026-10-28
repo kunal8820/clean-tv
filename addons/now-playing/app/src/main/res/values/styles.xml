@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.NowPlaying" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowBackground">#FF090C14</item>
+        <item name="android:colorBackground">#FF090C14</item>
+    </style>
+</resources>
