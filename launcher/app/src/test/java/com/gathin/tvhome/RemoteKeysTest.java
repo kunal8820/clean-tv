@@ -174,7 +174,12 @@ public class RemoteKeysTest {
         });
 
         void down(String button, long at, String holdApp) {
-            presses.down(button, at, 0, holdApp, opened::add);
+            presses.down(button, at, 0, holdApp, this, opened::add);
+        }
+
+        /** A DOWN as one of the two helpers sees it; what it opens is noted with its name. */
+        void down(String helper, String button, long at, String holdApp) {
+            presses.down(button, at, 0, holdApp, helper, target -> opened.add(helper + ": " + target));
         }
 
         void up(String button, long at, long downTime, String app, String holdApp) {
@@ -233,6 +238,68 @@ public class RemoteKeysTest {
         remote.presses.up("1:190:0", 1200, 1000, true, "tap", "hold", remote.opened::add);
         remote.holdTimeout();
         assertTrue(remote.opened.isEmpty());
+    }
+
+    @Test public void aHelperUnboundBeforeTheHoldCancelsIt() {
+        Remote remote = new Remote();
+        remote.down("home", "1:190:0", 1000, "hold");
+        remote.presses.release("home");
+        remote.presses.release("home");   // onUnbind, then onDestroy
+        remote.holdTimeout();
+        assertTrue(remote.opened.isEmpty());
+        assertTrue(remote.holds.isEmpty());
+    }
+
+    @Test public void losingOneHelperLeavesTheHoldWithTheOther() {
+        Remote remote = new Remote();
+        remote.down("home", "1:190:0", 1000, "hold");
+        remote.down("input", "1:190:0", 1000, "hold");
+        remote.presses.release("home");
+        remote.holdTimeout();
+        remote.up("1:190:0", 1800, 1000, "tap", "hold");
+        assertEquals(Arrays.asList("input: hold"), remote.opened);
+    }
+
+    @Test public void losingOneHelperKeepsTheOthersTap() {
+        Remote remote = new Remote();
+        remote.down("home", "1:190:0", 1000, "hold");
+        remote.down("input", "1:190:0", 1000, "hold");
+        remote.presses.release("input");
+        remote.up("1:190:0", 1200, 1000, "tap", "hold");
+        remote.holdTimeout();
+        assertEquals(Arrays.asList("tap"), remote.opened);
+    }
+
+    @Test public void aHelperThatStopsFilteringReleasesItsHold() {
+        // gamepad_passthrough drops the key filter when a controller connects: the UP never reaches that helper.
+        Remote remote = new Remote();
+        remote.down("home", "1:190:0", 1000, "hold");
+        remote.down("input", "1:190:0", 1000, "hold");
+        remote.presses.release("home");
+        remote.presses.release("input");
+        remote.holdTimeout();
+        assertTrue(remote.opened.isEmpty());
+    }
+
+    @Test public void anUpAfterTheHoldWasReleasedOpensNothing() {
+        Remote remote = new Remote();
+        remote.down("home", "1:190:0", 1000, "hold");
+        remote.presses.release("home");
+        remote.up("1:190:0", 1200, 1000, "tap", "hold");
+        remote.holdTimeout();
+        // The next press is answered as usual.
+        remote.down("home", "1:190:0", 2000, "hold");
+        remote.up("1:190:0", 2100, 2000, "tap", "hold");
+        assertEquals(Arrays.asList("tap"), remote.opened);
+    }
+
+    @Test public void releasingAHelperLeavesAnotherButtonsHoldAlone() {
+        Remote remote = new Remote();
+        remote.down("home", "1:190:0", 1000, "a.hold");
+        remote.down("input", "1:191:0", 1100, "b.hold");
+        remote.presses.release("home");
+        remote.holdTimeout();
+        assertEquals(Arrays.asList("input: b.hold"), remote.opened);
     }
 
     @Test public void anUpWithoutItsDownUsesTheEventsDownTime() {
