@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Two forward triangles, as on the tvOS Now Playing controls. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp"
+    android:viewportWidth="24" android:viewportHeight="24">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M2.5,6.6v10.8a0.8,0.8 0 0 0 1.25,0.66l8,-5.4a0.8,0.8 0 0 0 0,-1.32l-8,-5.4a0.8,0.8 0 0 0 -1.25,0.66z M12,6.6v10.8a0.8,0.8 0 0 0 1.25,0.66l8,-5.4a0.8,0.8 0 0 0 0,-1.32l-8,-5.4a0.8,0.8 0 0 0 -1.25,0.66z" />
+</vector>

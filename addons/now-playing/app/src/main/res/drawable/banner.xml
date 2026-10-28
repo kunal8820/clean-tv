@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 16:9 banner: a record sleeve with a note, sound bars and a play glyph on a warm coral tile. Own art. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp" android:height="180dp"
+    android:viewportWidth="320" android:viewportHeight="180">
+    <path android:fillColor="#FF6B4A" android:pathData="M0,0h320v180h-320z" />
+    <path android:fillColor="#1C1C22" android:pathData="M58,40h100a10,10 0 0 1 10,10v80a10,10 0 0 1 -10,10h-100a10,10 0 0 1 -10,-10v-80a10,10 0 0 1 10,-10z" />
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M96,64v38.5a11,11 0 1 0 6,9.8v-36.3l26,-6v26.5a11,11 0 1 0 6,9.8v-44.3z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M192,96h10v28h-10z M210,72h10v52h-10z M228,84h10v40h-10z M246,60h10v64h-10z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M268,82l22,13l-22,13z" />
+</vector>

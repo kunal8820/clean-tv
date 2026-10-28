@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Now Playing</string>
+    <string name="listener_label">Now Playing (media sessions only)</string>
+    <string name="now_playing_upper">NOW PLAYING</string>
+    <string name="paused_upper">PAUSED</string>
+
+    <string name="nothing_title">Nothing playing</string>
+    <string name="nothing_hint">Start music in an app, then press Home: it keeps playing, and this screen and the pop-up show it.</string>
+    <string name="no_access_title">Needs notification access</string>
+    <string name="no_access_hint">Run install.sh from a computer (see the README), or turn on Now Playing in Settings › Apps › Special app access › Notification access. It reads no notifications: Android only shows other apps\' music to apps with this access.</string>
+
+    <string name="previous">Previous</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="next">Next</string>
+    <string name="open_app">Open %1$s</string>
+    <string name="open_settings">Open settings</string>
+    <string name="popup_on">Pop-up: On</string>
+    <string name="popup_off">Pop-up: Off</string>
+    <string name="popup_needs_overlay">The pop-up needs Display over other apps: run install.sh again.</string>
+    <string name="live">LIVE</string>
+    <string name="remaining">-%1$s</string>
+
+    <string name="check_listener">Notification access</string>
+    <string name="check_overlay">Display over other apps</string>
+    <string name="check_usage">Usage access (optional)</string>
+    <string name="check_on">On</string>
+    <string name="check_off">Off: run install.sh</string>
+    <string name="check_off_optional">Off: pop-ups over the music app too</string>
+
+    <string name="credit">Now Playing Add-on by Phil Trinh</string>
+</resources>

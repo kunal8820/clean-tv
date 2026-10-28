@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The artwork placeholder when nothing plays or the app sends no picture. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp" android:height="96dp"
+    android:viewportWidth="96" android:viewportHeight="96">
+    <path android:fillColor="#59FFFFFF"
+        android:pathData="M36,26v34.5a9.5,9.5 0 1 0 5,8.4v-31.4l24,-5.5v22.4a9.5,9.5 0 1 0 5,8.4v-41.3z" />
+</vector>
