@@ -209,6 +209,14 @@
             android:exported="true"
             android:permission="android.permission.WRITE_SECURE_SETTINGS" />
 
+        <!-- tools/order.py reads and sets the tile order through this (content call); see OrderProvider, which
+             checks WRITE_SECURE_SETTINGS itself because android:permission does not cover call(). -->
+        <provider
+            android:name=".OrderProvider"
+            android:authorities="${applicationId}.order"
+            android:exported="true"
+            android:permission="android.permission.WRITE_SECURE_SETTINGS" />
+
         <!-- The remote's Input button (KEYCODE_TV or KEYCODE_TV_INPUT) opens the input switcher, and input_key_keycodes and
          app_keys (config.xml or a theme) bring back other remote buttons; see InputKeyService. -->
         <!-- Bound again by the system after a force stop, which restarts Home on firmware that kills

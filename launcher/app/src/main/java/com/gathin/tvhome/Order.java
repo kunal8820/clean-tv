@@ -93,6 +93,24 @@ final class Order {
     }
 
     /**
+     * The entries of a list typed for tools/order.py (OrderProvider set): package names or components, one per line
+     * or comma-separated, trimmed; blank lines and lines starting with # are left out, and so is anything after a #.
+     */
+    static List<String> entries(String text) {
+        List<String> out = new ArrayList<>();
+        if (text == null) return out;
+        for (String line : text.split("\n", -1)) {
+            int hash = line.indexOf('#');
+            if (hash >= 0) line = line.substring(0, hash);
+            for (String part : line.split(",", -1)) {
+                String e = part.trim();
+                if (!e.isEmpty() && !out.contains(e)) out.add(e);
+            }
+        }
+        return out;
+    }
+
+    /**
      * Rank of each saved key (0 = first) when the order still applies to these dock_apps, else an empty map.
      * Tiles without a rank sort after every ranked one.
      */

@@ -106,4 +106,18 @@ public class OrderTest {
         });
         assertEquals(Arrays.asList("c/.C", "a/.A", "m/.M", "n/.N"), tiles);
     }
+
+    @Test
+    public void entriesTakeLinesCommasAndComments() {
+        String typed = "# my order\n com.google.android.youtube.tv \r\ncom.netflix.ninja, ar.tvplayer.tv/.ui.MainActivity\n\n"
+                + "com.limelight   # Moonlight\ncom.netflix.ninja\n";
+        assertEquals(Arrays.asList("com.google.android.youtube.tv", "com.netflix.ninja", "ar.tvplayer.tv/.ui.MainActivity",
+                "com.limelight"), Order.entries(typed));
+    }
+
+    @Test
+    public void entriesOfNothingAreEmpty() {
+        assertTrue(Order.entries(null).isEmpty());
+        assertTrue(Order.entries(" \n# only a comment\n,,").isEmpty());
+    }
 }

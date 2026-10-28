@@ -16,6 +16,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ChangedPackages;
 import android.content.res.ColorStateList;
+import android.database.ContentObserver;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -391,6 +392,20 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             if (!tileRefresh.onPackagesChanged()) return;
             reloadApps(false);
             if (appLibrary != null) appLibrary.refresh();
+        }
+    };
+    /**
+     * tools/order.py saved a tile order through OrderProvider: use it, as the reorder button's save does. Ignored while
+     * the owner is carrying tiles, since ending the mode saves what is on screen.
+     */
+    private final ContentObserver orderObserver = new ContentObserver(handler) {
+        @Override
+        public void onChange(boolean selfChange) {
+            if (reordering || adapter == null) return;
+            Order order = Order.load(Order.file(MainActivity.this));
+            adapter.setSavedOrder(Order.ranks(order, dockApps), Order.docked(order, dockApps));
+            // In the background this only marks the tiles stale; onResume rebuilds them once.
+            if (tileRefresh.onPackagesChanged()) reloadApps(false);
         }
     };
     // Right after boot the clock is often wrong until network time arrives; don't wait a minute to catch up.
@@ -886,6 +901,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         } else {
             registerReceiver(packageReceiver, packageFilter);
         }
+        getContentResolver().registerContentObserver(OrderProvider.uri(this), false, orderObserver);
 
         ConnectivityManager cm = getSystemService(ConnectivityManager.class);
         TvInputManager tim = (TvInputManager) getSystemService(TV_INPUT_SERVICE);
@@ -1281,6 +1297,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         super.onDestroy();
         if (gameDay != null) gameDay.shutdown();
         unregisterReceiver(packageReceiver);
+        getContentResolver().unregisterContentObserver(orderObserver);
         wallpaperPlayer.close();
         ConnectivityManager cm = getSystemService(ConnectivityManager.class);
         TvInputManager tim = (TvInputManager) getSystemService(TV_INPUT_SERVICE);
