@@ -260,17 +260,16 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private boolean openOnStartChoice;
     /** open_on_start_network_wait, in ms; the boot's app while it waits for the network, and until when. */
     private long openOnStartWaitMs;
-    private Intent startPending;
+    private volatile Intent startPending;
     private long startDeadline;
+    /** Opens the boot's app once the network is validated (networkCallback posts this) or the wait is over. */
     private final Runnable openWhenOnline = new Runnable() {
         @Override
         public void run() {
             if (startPending == null) return;
             if (!OpenOnStart.opensNow(OpenOnStart.online(MainActivity.this), SystemClock.elapsedRealtime(),
-                    startDeadline)) {
-                handler.postDelayed(this, 500);
-                return;
-            }
+                    startDeadline)) return;
+            handler.removeCallbacks(this);   // the deadline's run, when the network came first
             Intent i = startPending;
             startPending = null;
             open(i);
@@ -351,6 +350,8 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         @Override
         public void onCapabilitiesChanged(@NonNull Network network, @NonNull NetworkCapabilities caps) {
             boolean validated = caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
+            // open_on_start_network_wait: the boot's app opens on the first validated network.
+            if (validated && startPending != null) handler.post(openWhenOnline);
             if (validated == lastValidated) return;
             lastValidated = validated;
             if (wifiNoInternetTint != null) handler.post(MainActivity.this::updateWifiLabel);
@@ -3044,7 +3045,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         if (openOnStartWaitMs > 0 && !OpenOnStart.online(this)) {
             startPending = i;
             startDeadline = SystemClock.elapsedRealtime() + openOnStartWaitMs;
-            handler.postDelayed(openWhenOnline, 500);
+            handler.postDelayed(openWhenOnline, openOnStartWaitMs);
+            // Validated between the check above and startPending: networkCallback may have skipped it.
+            if (OpenOnStart.online(this)) handler.post(openWhenOnline);
             return false;
         }
         open(i);
