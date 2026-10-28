@@ -1,0 +1,53 @@
+# SHARP AQUOS-TVX19B (device gangnam, fingerprint SHARP/tclilux/gangnam), Taiwan
+# Android TV 11 (SDK 30), firmware RTOB.250807.002, MediaTek m7322, 1.4 GB RAM
+# Stock launcher: com.google.android.tvlauncher (Android TV, not Google TV).
+# Live TV app: com.mediatek.wwtv.tvcenter; HDMI/tuner inputs: com.mediatek.tvinput.
+#
+# Apply:   TV_HOST=<tv ip> tools/disable.sh examples/sharp-aquos-tvx19b/debloat.txt
+# Undo:    TV_HOST=<tv ip> tools/restore.sh examples/sharp-aquos-tvx19b/debloat.txt com.google.android.tvlauncher
+# Everything is DISABLED for user 0, never uninstalled. Comment out any line you want to keep.
+#
+# Applied on 2026-10-26 in two batches with the TV checked between them, then the CleanYourTV launcher
+# (stock launcher disabled by build-and-install). Checked the same day across two reboots: nothing came
+# back, Home stayed the new launcher, Netflix and YouTube played, Live TV and the Inputs menu (HDMI)
+# worked, and the remote's Input, Netflix and YouTube buttons worked with no key helper. Nothing had to be
+# re-enabled.
+#
+# Developer options only offer USB debugging, but port 5555 listens with it on (service.adb.tcp.port is
+# 5555 at boot), so network ADB works without a Wireless debugging menu. ro.adb.secure=1.
+#
+# Home: rcota.android.av.sharp.co.jp.rcota (SHARP's remote/firmware updater, kept) also declares HOME. Once,
+# after the handover, Android's chooser came up between the launcher and "RC 更新" (rcota); picking the
+# launcher with "Always" settled it and it stayed through both reboots. Cause not pinned down.
+#
+# DNS: strict Private DNS (dns.adguard-dns.com) worked on Wi-Fi alone, but with the Tailscale app connected
+# the VPN network reported "Private DNS is broken" and YouTube showed no connection while Netflix still
+# played from cache. Back to opportunistic, with the blocking resolver set as Tailscale's DNS instead.
+#
+# Already disabled before this list (firmware or earlier owner), left as they were:
+# com.cltv.fast, com.google.android.marvin.talkback.
+#
+# Kept on purpose: Play Store + Play Services, Gboard, com.mediatek.tvinput / com.mediatek.tv.service /
+# com.mediatek.wwtv.tvcenter (Live TV and HDMI), com.mediatek.wwtv.setupwizard (channel scan),
+# com.mediatek.wwtv.mediaplayer (USB media), rcota.android.av.sharp.co.jp.rcota (updates),
+# com.mediatek.tv.factory, mediatek.factorymenu.ui and com.mediatek.testpq (never launched),
+# jp.co.sharp.av.android.sharplegaldetail, jp.co.sharp.av.android.emanual,
+# com.mstar.android.tv.disclaimercustomization, com.google.android.katniss (voice, by choice),
+# com.google.android.apps.mediashell (Chromecast, by choice), com.google.android.tv.remote.service
+# (phone as remote, by choice), com.google.android.backdrop (ambient mode).
+
+# --- Telemetry, ACR and feedback ---
+tv.anoki.acr.controller                      # Anoki ACR: recognises what is on screen, starts at boot
+com.sharplabs.dmt.aas.analyticsservice       # SHARP analytics service, starts at boot
+com.google.android.feedback
+
+# --- Vendor content, partner setup and retail demo ---
+com.google.android.partnersetup              # Play partner customizations
+fusion.android.tv.demo                       # store mode
+jp.co.sharp.av.android.epopdemo              # store demo
+azan.android.av.sharp.co.jp                  # preloaded prayer-times app
+
+# --- Apps the owner does not use ---
+com.amazon.amazonvideo.livingroom            # Prime Video
+com.google.android.youtube.tvmusic           # YouTube Music
+com.google.android.play.games                # Play Games

@@ -1,0 +1,6 @@
+{
+  "tv": "SHARP AQUOS-TVX19B (gangnam, MediaTek m7322), Taiwan",
+  "os": "Android TV 11",
+  "brand": "SHARP",
+  "notes": "Anoki ACR, SHARP analytics, feedback, partner setup, store demos, prayer-times app; Prime Video, YouTube Music, Play Games off by choice; port 5555 open with USB debugging alone; rcota (SHARP updater) also claims Home; strict Private DNS breaks under Tailscale; 1.4 GB"
+}
