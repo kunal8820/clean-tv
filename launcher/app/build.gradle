@@ -40,6 +40,18 @@ android {
     }
 }
 
+afterEvaluate {
+    if (project.findProperty('omitHomeCategory') == 'true') {
+        tasks.matching { it.name.startsWith('process') && it.name.endsWith('Manifest') }.configureEach { task ->
+            task.doLast {
+                task.outputs.files.asFileTree.matching { include '**/AndroidManifest.xml' }.each { f ->
+                    f.text = f.text.replaceAll('<category\\s+android:name="android\\.intent\\.category\\.HOME"\\s*/>', '')
+                }
+            }
+        }
+    }
+}
+
 dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     implementation 'androidx.dynamicanimation:dynamicanimation:1.0.0'
